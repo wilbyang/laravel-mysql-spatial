@@ -16,8 +16,8 @@ class Point extends Geometry
     {
         parent::__construct($srid);
 
-        $this->lat = (float) $lat;
-        $this->lng = (float) $lng;
+        $this->lat = (float)$lat;
+        $this->lng = (float)$lng;
     }
 
     public function getLat()
@@ -27,7 +27,7 @@ class Point extends Geometry
 
     public function setLat($lat)
     {
-        $this->lat = (float) $lat;
+        $this->lat = (float)$lat;
     }
 
     public function getLng()
@@ -37,24 +37,24 @@ class Point extends Geometry
 
     public function setLng($lng)
     {
-        $this->lng = (float) $lng;
+        $this->lng = (float)$lng;
     }
 
     public function toPair()
     {
-        return $this->getLng().' '.$this->getLat();
+        return $this->getLng() . ' ' . $this->getLat();
     }
 
     public static function fromPair($pair, $srid = 0)
     {
         list($lng, $lat) = explode(' ', trim($pair, "\t\n\r \x0B()"));
 
-        return new static((float) $lat, (float) $lng, (int) $srid);
+        return new static((float)$lat, (float)$lng, (int)$srid);
     }
 
     public function toWKT()
     {
-        return sprintf('POINT(%s)', (string) $this);
+        return sprintf('POINT(%s)', (string)$this);
     }
 
     public static function fromString($wktArgument, $srid = 0)
@@ -64,7 +64,7 @@ class Point extends Geometry
 
     public function __toString()
     {
-        return $this->getLng().' '.$this->getLat();
+        return $this->getLng() . ' ' . $this->getLat();
     }
 
     /**
@@ -79,7 +79,7 @@ class Point extends Geometry
         }
 
         if (!is_a($geoJson, GeoJsonPoint::class)) {
-            throw new InvalidGeoJsonException('Expected '.GeoJsonPoint::class.', got '.get_class($geoJson));
+            throw new InvalidGeoJsonException('Expected ' . GeoJsonPoint::class . ', got ' . get_class($geoJson));
         }
 
         $coordinates = $geoJson->getCoordinates();
@@ -92,7 +92,7 @@ class Point extends Geometry
      *
      * @return \GeoJson\Geometry\Point
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return new GeoJsonPoint([$this->getLng(), $this->getLat()]);
     }

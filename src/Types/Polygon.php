@@ -10,7 +10,7 @@ class Polygon extends MultiLineString
 {
     public function toWKT()
     {
-        return sprintf('POLYGON(%s)', (string) $this);
+        return sprintf('POLYGON(%s)', (string)$this);
     }
 
     public static function fromJson($geoJson)
@@ -20,7 +20,7 @@ class Polygon extends MultiLineString
         }
 
         if (!is_a($geoJson, GeoJsonPolygon::class)) {
-            throw new InvalidGeoJsonException('Expected '.GeoJsonPolygon::class.', got '.get_class($geoJson));
+            throw new InvalidGeoJsonException('Expected ' . GeoJsonPolygon::class . ', got ' . get_class($geoJson));
         }
 
         $set = [];
@@ -40,7 +40,7 @@ class Polygon extends MultiLineString
      *
      * @return \GeoJson\Geometry\Polygon
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $linearRings = [];
         foreach ($this->items as $lineString) {

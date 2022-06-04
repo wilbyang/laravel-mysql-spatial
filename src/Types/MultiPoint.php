@@ -17,7 +17,7 @@ class MultiPoint extends PointCollection
 
     public function toWKT()
     {
-        return sprintf('MULTIPOINT(%s)', (string) $this);
+        return sprintf('MULTIPOINT(%s)', (string)$this);
     }
 
     public static function fromWkt($wkt, $srid = 0)
@@ -53,7 +53,7 @@ class MultiPoint extends PointCollection
         }
 
         if (!is_a($geoJson, GeoJsonMultiPoint::class)) {
-            throw new InvalidGeoJsonException('Expected '.GeoJsonMultiPoint::class.', got '.get_class($geoJson));
+            throw new InvalidGeoJsonException('Expected ' . GeoJsonMultiPoint::class . ', got ' . get_class($geoJson));
         }
 
         $set = [];
@@ -69,7 +69,7 @@ class MultiPoint extends PointCollection
      *
      * @return \GeoJson\Geometry\MultiPoint
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $points = [];
         foreach ($this->items as $point) {

@@ -11,6 +11,7 @@ use Grimzy\LaravelMysqlSpatial\Exceptions\InvalidGeoJsonException;
 use Illuminate\Contracts\Support\Arrayable;
 use InvalidArgumentException;
 use IteratorAggregate;
+use Traversable;
 
 class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAccess, Arrayable, Countable
 {
@@ -37,7 +38,7 @@ class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAcc
 
     /**
      * @param GeometryInterface[] $geometries
-     * @param int                 $srid
+     * @param int $srid
      *
      * @throws InvalidArgumentException
      */
@@ -57,7 +58,7 @@ class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAcc
 
     public function toWKT()
     {
-        return sprintf('GEOMETRYCOLLECTION(%s)', (string) $this);
+        return sprintf('GEOMETRYCOLLECTION(%s)', (string)$this);
     }
 
     public function __toString()
@@ -78,7 +79,7 @@ class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAcc
         return new static(array_map(function ($geometry_string) {
             $klass = Geometry::getWKTClass($geometry_string);
 
-            return call_user_func($klass.'::fromWKT', $geometry_string);
+            return call_user_func($klass . '::fromWKT', $geometry_string);
         }, $geometry_strings), $srid);
     }
 
@@ -87,22 +88,22 @@ class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAcc
         return $this->items;
     }
 
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->items[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->offsetExists($offset) ? $this->items[$offset] : null;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->validateItemType($value);
 
@@ -113,12 +114,12 @@ class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAcc
         }
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->items[$offset]);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
@@ -130,7 +131,7 @@ class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAcc
         }
 
         if (!is_a($geoJson, FeatureCollection::class)) {
-            throw new InvalidGeoJsonException('Expected '.FeatureCollection::class.', got '.get_class($geoJson));
+            throw new InvalidGeoJsonException('Expected ' . FeatureCollection::class . ', got ' . get_class($geoJson));
         }
 
         $set = [];
@@ -146,7 +147,7 @@ class GeometryCollection extends Geometry implements IteratorAggregate, ArrayAcc
      *
      * @return \GeoJson\Geometry\GeometryCollection
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $geometries = [];
         foreach ($this->items as $geometry) {
